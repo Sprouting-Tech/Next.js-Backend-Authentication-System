@@ -11,7 +11,8 @@ export async function GET() {
       name:"token",
       value:"",
       httpOnly: true,
-      secure: false, // set to true in production
+     secure: process.env.NODE_ENV === "production",
+
       sameSite: "strict",
       path: "/",
       maxAge: 0, // expires immediately

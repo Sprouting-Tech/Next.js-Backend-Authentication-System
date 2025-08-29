@@ -3,7 +3,7 @@ export default function Home() {
   return (
     <div >
       <div className=" h-10" >
-        <h1 className="mt-5">Clinc Project</h1>
+        <h1 className="mt-5">Log in/Log out Authentication System</h1>
        </div>
        
       <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-pink-50 to-pink-100">

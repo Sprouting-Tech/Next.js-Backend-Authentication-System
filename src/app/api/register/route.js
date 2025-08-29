@@ -1,22 +1,25 @@
+// src/app/api/register/route.js
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { supabase } from "@/lib/supabase";
 
 export async function POST(req) {
   try {
-    const { name, password } = await req.json();
-    if (!name || !password) {
+    const { name, password, email, role, adminSecret } = await req.json();
+
+    if (!name || !password || !email) {
       return NextResponse.json(
         { error: "All fields are required" },
         { status: 400 }
       );
     }
-    // Check if user exists
-    const {data: existingUser,  error: checkError } = await supabase
-    .from("users")
-    .select("*")
-    .eq("name",name)
-    .single();
+
+    // Check if user already exists
+    const { data: existingUser } = await supabase
+      .from("users")
+      .select("id")
+      .eq("email", email)
+      .single();
 
     if (existingUser) {
       return NextResponse.json(
@@ -24,21 +27,34 @@ export async function POST(req) {
         { status: 400 }
       );
     }
-    // Hash password
+
+    // Hash the password (optional, but recommended)
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const { error } = await supabase
-      .from("users")
-      .insert([{  name, password: hashedPassword }]);
+    // Determine role
+    let finalRole = "user";
+    if (role === "admin" && adminSecret === process.env.ADMIN_SECRET) {
+      finalRole = "admin";
+    }
 
-    if (error) {
-  return NextResponse.json({ error: error.message }, { status: 500 });
-}
+    // Insert user directly into "users" table (RLS disabled)
+    const { error: insertError } = await supabase.from("users").insert([
+      {
+        name,
+        email,
+        password: hashedPassword,
+        role: finalRole,
+      },
+    ]);
 
-return NextResponse.json(
-  { message: "User registered successfully" },
-  { status: 201 }
-);
+    if (insertError) {
+      return NextResponse.json({ error: insertError.message }, { status: 500 });
+    }
+
+    return NextResponse.json(
+      { message: "User registered successfully" },
+      { status: 201 }
+    );
   } catch (error) {
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
