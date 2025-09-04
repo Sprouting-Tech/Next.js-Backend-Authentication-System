@@ -6,7 +6,7 @@ This document summarizes the implementation of file upload functionality for pro
 ## Changes Made
 
 ### 1. Environment Variables Setup
-Updated `.env.local` with required Supabase configuration:
+Updated `.env.local` with required  n:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://qvlzonvjrktvwviufhng.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...

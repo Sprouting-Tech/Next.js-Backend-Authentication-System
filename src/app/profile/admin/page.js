@@ -58,28 +58,35 @@ export default function AdminProfile() {
   if (!user) return <p>Loading...</p>;
 
   return (
-    <div className="flex flex-col items-center p-6 min-h-screen bg-red-50">
-      <div className="relative w-28 h-28">
-        <Image
-          src={avatar || "/default-avatar.jpg"}
-          alt="Profile Picture"
-          width={112}
-          height={112}
-          className="rounded-full object-cover border-2 border-red-300"
-        />
-        <label className="absolute bottom-0 right-0 bg-red-500 text-red rounded-full p-1 cursor-pointer">
-          +
-          <input type="file" hidden onChange={handleFileChange} />
-        </label>
-      </div>
-      <h2 className="text-red-500 font-semibold mt-4">{user.name}</h2>
-      <p className="text-red-500">{user.email}</p>
-      <button
-        onClick={handleLogout}
-        className="mt-6 px-6 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700"
-      >
-        Log Out
-      </button>
-    </div>
-  );
+  <div className="flex flex-col items-center justify-center min-h-screen bg-red-50">
+  {/* Avatar container */}
+  <div className="relative w-32 h-32">
+    <Image
+      src={avatar || "/default-avatar.jpg"}
+      alt="Profile Picture"
+      width={128}
+      height={128}
+      className="rounded-full object-cover border-4 border-red-300 shadow-md"
+    />
+    {/* Upload button */}
+    <label className="absolute bottom-1 right-1 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center cursor-pointer shadow hover:bg-red-600 transition">
+      <input type="file" hidden onChange={handleFileChange} />
+      +
+    </label>
+  </div>
+
+  {/* Username + Email */}
+  <h2 className="text-red-500 font-semibold mt-16">{user.name}</h2>
+  <p className="text-red-500 mt-1">{user.email}</p>
+
+  {/* Logout */}
+  <button
+    onClick={handleLogout}
+    className="mt-6 px-6 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700"
+  >
+    Log Out
+  </button>
+</div>
+
+  )
 }
